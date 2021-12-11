@@ -2,46 +2,47 @@
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader'
-require 'sqlite3'
+require 'sinatra/activerecord'
 
-def init_db
-	@db = SQLite3::Database.new 'leprosorium.db'
-	@db.results_as_hash = true
+set :database, {adapter: "sqlite3", database: "leprosorium.db"}
+
+
+class Post < ActiveRecord::Base 
 end
 
-# before вызываеся каждый раз при перезагрузке 
-# любой страницы
+class Comments < ActiveRecord::Base 
+end
+
 before do 
-	init_db
+	@posts = Post.all
 end
-
 # configure вызывается каждый раз при конфигурации приложения
 # когда изменился код программы И перезагрузилать страница
-configure do 
-	#инициализация бд
-	init_db
+# configure do 
+# 	#инициализация бд
+# 	init_db
 
-	#создает таблицу если она не существует
-	@db.execute 'CREATE TABLE if not exists Posts
-	(
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		created_date DATE,
-		content TEXT
-	)'
+# 	#создает таблицу если она не существует
+# 	@db.execute 'CREATE TABLE if not exists Posts
+# 	(
+# 		id INTEGER PRIMARY KEY AUTOINCREMENT,
+# 		created_date DATE,
+# 		content TEXT
+# 	)'
 
-	#создает таблицу если она не существует
-	@db.execute 'CREATE TABLE if not exists Comments
-	(
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		created_date DATE,
-		content TEXT,
-		post_id integer
-	)'
-end
+# 	#создает таблицу если она не существует
+# 	@db.execute 'CREATE TABLE if not exists Comments
+# 	(
+# 		id INTEGER PRIMARY KEY AUTOINCREMENT,
+# 		created_date DATE,
+# 		content TEXT,
+# 		post_id integer
+# 	)'
+# end
 
 get '/' do 
 	# выбираем список постов из бд
-	@results = @db.execute 'select * from Posts order by id desc'
+	# @results = @db.execute 'select * from Posts order by id desc'
 
 	erb :index
 end
