@@ -46,7 +46,7 @@ get '/' do
 
 	erb :index
 end 
-
+ 
 # браузер получает данные с сервера
 get '/new' do
 	erb :new
