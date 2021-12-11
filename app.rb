@@ -45,7 +45,7 @@ get '/' do
 	# @results = @db.execute 'select * from Posts order by id desc'
 
 	erb :index
-end
+end 
 
 # браузер получает данные с сервера
 get '/new' do
